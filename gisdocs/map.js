@@ -4,11 +4,12 @@ var bounds = ol.proj.transform([-123.8, 45.8, -121.5, 44.68], 'EPSG:4326', 'EPSG
 var bounds = [-13884991, 2870341, -7455066, 6338219]
 
 // data attributions
-var tm_attribution = new ol.Attribution({html: 'Tiles &copy; <a href="http://trimet.org/">TriMet</a>'});
-var metro_attribution = new ol.Attribution({html: 'Aerial data &copy; <a href="http://metro.org/">Oregon Metro</a>'});
+var tm_attribution = new ol.Attribution({html: 'Tiles &copy; <a target="#" href="http://trimet.org/">TriMet</a>; map data'});
+var metro_attribution = new ol.Attribution({html: 'and &copy; <a target="#" href="http://oregonmetro.gov/rlis">Oregon Metro</a>'});
 var attributions = [
     tm_attribution,
-    ol.source.OSM.ATTRIBUTION
+    ol.source.OSM.ATTRIBUTION,
+    metro_attribution
 ];
 
 // base layers
