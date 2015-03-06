@@ -1,18 +1,17 @@
 var layer = new ol.layer.Tile({
     source: new ol.source.MapQuest({layer: 'sat'})
 });
+var pos = ol.proj.transform([-122.55, 45.55], 'EPSG:4326', 'EPSG:3857');
 
 var map = new ol.Map({
     layers: [layer],
-    renderer: exampleNS.getRendererFromQueryString(),
     target: 'map',
     view: new ol.View({
-        center: [0, 0],
-        zoom: 2
+        center: pos,
+        zoom: 11
     })
 });
 
-var pos = ol.proj.transform([-122.55, 45.55], 'EPSG:4326', 'EPSG:3857');
 
 // Vienna marker
 var marker = new ol.Overlay({
