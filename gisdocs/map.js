@@ -13,10 +13,19 @@ var attributions = [
 ];
 
 // base layers
+var domain = "http://maps7.trimet.org"
+
 var tm_carto_layer = new ol.layer.Tile({
     source: new ol.source.XYZ({
         attributions: attributions,
-        url: 'http://maps7.trimet.org/tilecache/tilecache.py/1.0.0/currentOSM/{z}/{x}/{y}'
+        url: domain + '/tilecache/tilecache.py/1.0.0/currentOSM/{z}/{x}/{y}'
+    })
+});
+
+var tm_aerial_layer = new ol.layer.Tile({
+    source: new ol.source.XYZ({
+        attributions: attributions,
+        url: domain + '/tilecache/tilecache.py/1.0.0/hybridOSM/{z}/{x}/{y}'
     })
 });
 
@@ -31,7 +40,8 @@ var taxlot_layer = new ol.layer.Tile({
 
 var layers = [
     tm_carto_layer,
-    taxlot_layer
+    taxlot_layer,
+    tm_aerial_layer
 ];
 
 var map = new ol.Map({
@@ -42,6 +52,31 @@ var map = new ol.Map({
         zoom: 11
     })
 });
+
+
+// swipe
+var swipe = document.getElementById('swipe');
+
+tm_aerial_layer.on('precompose', function(event) {
+  var ctx = event.context;
+  var width = ctx.canvas.width * (swipe.value / 100);
+
+  ctx.save();
+  ctx.beginPath();
+  ctx.rect(width, 0, ctx.canvas.width - width, ctx.canvas.height);
+  ctx.clip();
+});
+
+tm_aerial_layer.on('postcompose', function(event) {
+  var ctx = event.context;
+  ctx.restore();
+});
+
+swipe.addEventListener('input', function() {
+  map.render();
+}, false);
+
+
 
 
 // Vienna marker
