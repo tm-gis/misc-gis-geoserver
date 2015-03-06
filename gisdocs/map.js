@@ -1,13 +1,29 @@
-var layer = new ol.layer.Tile({
+var center = ol.proj.transform([-122.55, 45.55], 'EPSG:4326', 'EPSG:3857');
+var bounds = ol.proj.transform([-123.8, 45.8, -121.5, 44.68], 'EPSG:4326', 'EPSG:3857');
+var bounds = [-13884991, 2870341, -7455066, 6338219]
+
+var base_layer = new ol.layer.Tile({
     source: new ol.source.MapQuest({layer: 'sat'})
 });
-var pos = ol.proj.transform([-122.55, 45.55], 'EPSG:4326', 'EPSG:3857');
+
+
+var layers = [
+  base_layer,
+  new ol.layer.Tile({
+    extent: bounds,
+    source: new ol.source.TileWMS(({
+      url: 'http://maps7.trimet.org/gis/geoserver/wms',
+      params: {'LAYERS': 'load:taxlot', 'TILED': true},
+      serverType: 'geoserver'
+    }))
+  })
+];
 
 var map = new ol.Map({
-    layers: [layer],
+    layers: layers,
     target: 'map',
     view: new ol.View({
-        center: pos,
+        center: center,
         zoom: 11
     })
 });
@@ -15,7 +31,7 @@ var map = new ol.Map({
 
 // Vienna marker
 var marker = new ol.Overlay({
-    position: pos,
+    position: center,
     positioning: 'center-center',
     element: document.getElementById('marker'),
     stopEvent: false
@@ -24,7 +40,7 @@ map.addOverlay(marker);
 
 // Vienna label
 var vienna = new ol.Overlay({
-    position: pos,
+    position: center,
     element: document.getElementById('vienna')
 });
 map.addOverlay(vienna);
